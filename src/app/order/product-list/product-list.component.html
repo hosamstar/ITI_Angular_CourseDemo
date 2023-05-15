@@ -1,0 +1,122 @@
+<div class="mb-3">
+  <label for="prdCat" class="form-label">Category</label>
+  <!-- <select
+    #cat
+    class="form-select form-select-lg"
+    name="cat"
+    id="prdCat"
+    (change)="getSelectedCat(cat.id)"
+  > Two Way Binding is better Than this !! -->
+
+  <!-- <select
+    class="form-select form-select-lg"
+    name="cat"
+    id="prdCat"
+    (change)="getSelectedCat($event)" // In ts // event.target.value
+  > -->
+
+  <select
+    class="form-select form-select-lg"
+    name="cat"
+    id="prdCat"
+    [(ngModel)]="selectedCatId"
+  >
+    <option *ngFor="let cat of catList" [value]="cat.id" selected>
+      {{ cat.name }}
+    </option>
+  </select>
+</div>
+<div class="text-secondary">
+  [To be Removed] For test:
+  {{ selectedCatId }}
+
+  <div class="btn btn-primary" (click)="ChangeSelectedCatId()">
+    Change Sekected Cat Id
+  </div>
+</div>
+<hr />
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Imgage</th>
+      <th scope="col">Av. Quantity</th>
+      <th scope="col">Price</th>
+      <th scope="col">Count</th>
+      <th scope="col">Buy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- <tr
+      *ngFor="let prd of prdList; let i = index; trackBy: prdTrackByFn"
+      [class.bg-warning]="prd.quantity == 0"
+      [class.d-none]="selectedCatId != prd.categoryId"
+    > -->
+    <!-- <ng-container *ngFor="let prd of prdList">
+      <tr *ngIf="prd.quantity != 0"> -->
+    <!-- <ng-container *ngFor="let prd of prdList; let i = index"> -->
+    <!-- Or index as i -->
+    <!-- trackBy used to specify iterable objects identitiy, and so enhance the performance of ngFor in case of changes to the collections, and updated the changed object, without rebuild the DOM -->
+    <!-- [style.background-color]="prd.quantity == 0 ? 'lightyellow' : 'lightgray'" -->
+    <!-- d-none class binding can be cool example to understand but it is not good in performance. The filteration must be done in the backend !! -->
+    <!-- Safe Navigation operator ==> prd.:?property -->
+    <!-- Check first if this property exist or not if exist git it otherwise dont git it  -->
+    <!--
+          - ngIf (structural directive in general) change in DOM, while class binding or [hidden] just change the element to be hidden.
+          - use *ngIf IF COLLECTION DOESNT CHANGE REGURALY in the run time and use binding instead.
+          - We cant use two structural directive in the same html element, but we can use <ng-container> that will not reflect on the actual DOM as work around
+         -->
+    <!-- <tr
+      *ngFor="let prd of prdList; let i = index"
+      [class.bg-warning]="prd.quantity == 0"
+    > -->
+    <!-- <tr
+      *ngFor="let prd of prdList; let i = index"
+      [ngClass]="{
+        'bg-warning': prd.quantity == 0,
+        'text-primary': prd.quantity != 0
+      }"
+    > -->
+    <tr
+      *ngFor="let prd of prdList; let i = index"
+      [ngStyle]="{
+        'background-color': prd.quantity == 0 ? 'lightyellow' : 'lightgray'
+      }"
+    >
+      <th scope="row">{{ prd.id }}</th>
+      <td>{{ prd.name }}</td>
+      <td><img [src]="prd.imgUrl" alt="image" /></td>
+      <td>{{ prd.price }}</td>
+      <td>
+        <!-- <div *ngIf="prd.quantity != 0">{{ prd.quantity }}</div>
+        <div *ngIf="prd.quantity == 0">Out of stock</div> -->
+        <!-- <div *ngIf="prd.quantity != 0; else outOfStock">{{ prd.quantity }}</div>
+        <ng-template #outOfStock>Out Of Stock</ng-template> -->
+        <!--
+            https://www.freecodecamp.org/news/everything-you-need-to-know-about-ng-template-ng-content-ng-container-and-ngtemplateoutlet-4b7b51223691/
+           -->
+        <ng-container [ngSwitch]="prd.quantity">
+          <div *ngSwitchCase="0">Out of Stock</div>
+          <div *ngSwitchCase="1">Last Item !</div>
+          <div *ngSwitchDefault="2">{{ prd.quantity }}</div>
+        </ng-container>
+      </td>
+
+      <!-- Template Variable -->
+      <td><input #itemsCount type="number" class="form-control" /></td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="buy(prd.price, itemsCount.value)"
+        >
+          Buy
+        </button>
+      </td>
+    </tr>
+    <!-- </ng-container> -->
+  </tbody>
+</table>
+<hr />
+<h3>Order Total Price: {{ orderTotalPrice }}</h3>
