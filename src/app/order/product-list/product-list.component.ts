@@ -12,6 +12,8 @@ export class ProductListComponent implements OnInit {
   prdList: IProduct[];
   selectedCatId: number = 0;
   orderTotalPrice: number = 0;
+  orderDate: Date;
+
   constructor() {
     this.catList = [
       { id: 1, name: 'Laptops' },
@@ -22,7 +24,7 @@ export class ProductListComponent implements OnInit {
       {
         id: 100,
         name: 'Lenovo Thinkpad laptop',
-        price: 100,
+        price: 1000000000,
         quantity: 1,
         imgUrl: 'https://fakeimg.pl/200x100/',
         categoryId: 1,
@@ -30,7 +32,7 @@ export class ProductListComponent implements OnInit {
       {
         id: 200,
         name: 'Apple MacBok laptop',
-        price: 200,
+        price: 200000000,
         quantity: 0,
         imgUrl: 'https://fakeimg.pl/200x100/',
         categoryId: 1,
@@ -38,7 +40,7 @@ export class ProductListComponent implements OnInit {
       {
         id: 300,
         name: 'Lenovo tap 2',
-        price: 300,
+        price: 3000,
         quantity: 10,
         imgUrl: 'https://fakeimg.pl/200x100/',
         categoryId: 2,
@@ -46,7 +48,7 @@ export class ProductListComponent implements OnInit {
       {
         id: 400,
         name: 'Samsong Tap',
-        price: 400,
+        price: 4000,
         quantity: 2,
         imgUrl: 'https://fakeimg.pl/200x100/',
         categoryId: 2,
@@ -54,7 +56,7 @@ export class ProductListComponent implements OnInit {
       {
         id: 500,
         name: 'Samsong Note 10',
-        price: 500,
+        price: 5000,
         quantity: 0,
         imgUrl: 'https://fakeimg.pl/200x100/',
         categoryId: 3,
@@ -62,12 +64,13 @@ export class ProductListComponent implements OnInit {
       {
         id: 600,
         name: 'Samsong 522 Ultra',
-        price: 600,
+        price: 60000000,
         quantity: 1,
         imgUrl: 'https://fakeimg.pl/200x100/',
         categoryId: 3,
       },
     ];
+    this.orderDate = new Date();
   }
 
   ngOnInit(): void {}

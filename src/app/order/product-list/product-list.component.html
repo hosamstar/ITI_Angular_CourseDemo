@@ -33,6 +33,8 @@
   <div class="btn btn-primary" (click)="ChangeSelectedCatId()">
     Change Sekected Cat Id
   </div>
+
+  <p>Order Date: {{ orderDate | date : "longDate" }}</p>
 </div>
 <hr />
 <table class="table">
@@ -40,9 +42,10 @@
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Name</th>
-      <th scope="col">Imgage</th>
+      <th scope="col">Image</th>
       <th scope="col">Av. Quantity</th>
-      <th scope="col">Price</th>
+      <th scope="col">Price in USD</th>
+      <th scope="col">Price in EGP</th>
       <th scope="col">Count</th>
       <th scope="col">Buy</th>
     </tr>
@@ -86,8 +89,17 @@
     >
       <th scope="row">{{ prd.id }}</th>
       <td>{{ prd.name }}</td>
-      <td><img [src]="prd.imgUrl" alt="image" /></td>
-      <td>{{ prd.price }}</td>
+      <td>
+        <img
+          LightBox="red"
+          defaultColor="gray"
+          [src]="prd.imgUrl"
+          alt="image"
+        />
+        <!-- <img [LightBox]="Read from property in ts" [src]="prd.imgUrl" alt="image" /> -->
+      </td>
+      <td>{{ prd.price | currency : "USD" : "symbol" }}</td>
+      <td>{{ prd.price | USDtoEGP : 30 | currency : "EGP" : "symbol" }}</td>
       <td>
         <!-- <div *ngIf="prd.quantity != 0">{{ prd.quantity }}</div>
         <div *ngIf="prd.quantity == 0">Out of stock</div> -->
@@ -99,7 +111,7 @@
         <ng-container [ngSwitch]="prd.quantity">
           <div *ngSwitchCase="0">Out of Stock</div>
           <div *ngSwitchCase="1">Last Item !</div>
-          <div *ngSwitchDefault="2">{{ prd.quantity }}</div>
+          <div *ngSwitchDefault>{{ prd.quantity }}</div>
         </ng-container>
       </td>
 
