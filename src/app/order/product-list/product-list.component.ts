@@ -10,6 +10,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -23,13 +24,16 @@ export class ProductListComponent implements OnInit, OnChanges{
   @Output() totalPriceChanged: EventEmitter<number>;
   orderDate: Date;
 
-  constructor(private statiscPrdService: StaticProductsService) {
+  constructor(private statiscPrdService: StaticProductsService,
+              private router: Router) {
     this.totalPriceChanged = new EventEmitter<number>();
 
     this.orderDate = new Date();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.prdListOfCategory = this.statiscPrdService.getAllproducts();
+  }
 
   buy(prdPrice: number, count: any) {
     // Convert any to integer
@@ -52,5 +56,11 @@ export class ProductListComponent implements OnInit, OnChanges{
 
   prdTrackByFn(index: number, prd: IProduct): number {
     return prd.id;
+  }
+
+  openProductDetails(prdId: number){
+    // this.router.navigateByUrl(`/products/${prdId}`);
+    // this.router.navigateByUrl('/products/' + prdId);
+    this.router.navigate(['products', prdId]);
   }
 }
