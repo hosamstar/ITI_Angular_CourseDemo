@@ -1,25 +1,30 @@
 import { ICategory } from './../../models/icategory';
 import { IProduct } from './../../models/iproduct';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit {
-  catList: ICategory[];
+export class ProductListComponent implements OnInit, OnChanges {
   prdList: IProduct[];
-  selectedCatId: number = 0;
+  prdListOfCategory: IProduct[] = [];
+  @Input() sentCatId: number = 0;
   orderTotalPrice: number = 0;
+  @Output() totalPriceChanged: EventEmitter<number>;
   orderDate: Date;
 
   constructor() {
-    this.catList = [
-      { id: 1, name: 'Laptops' },
-      { id: 2, name: 'Tablets' },
-      { id: 3, name: 'Mobiles' },
-    ];
+    this.totalPriceChanged = new EventEmitter<number>();
     this.prdList = [
       {
         id: 100,
@@ -71,6 +76,18 @@ export class ProductListComponent implements OnInit {
       },
     ];
     this.orderDate = new Date();
+    this.prdListOfCategory = this.prdList;
+  }
+  ngOnChanges() {
+    this.filterProductByCatID();
+  }
+
+  private filterProductByCatID() {
+    if (this.sentCatId == 0) this.prdListOfCategory = this.prdList;
+    else
+      this.prdListOfCategory = this.prdList.filter(
+        (prd) => prd.categoryId == this.sentCatId
+      );
   }
 
   ngOnInit(): void {}
@@ -82,12 +99,13 @@ export class ProductListComponent implements OnInit {
     //itemsCount = count as number; // Usually doesn't work
     //itemsCount = +count; // Interesting and EASY !!
 
-    this.orderTotalPrice = parseInt(count) * prdPrice;
+    this.orderTotalPrice += parseInt(count) * prdPrice;
+    this.totalPriceChanged.emit(this.orderTotalPrice);
   }
 
-  ChangeSelectedCatId() {
-    this.selectedCatId = 1;
-  }
+  // ChangeSelectedCatId() {
+  //   this.selectedCatId = 1;
+  // }
 
   prdTrackByFn(index: number, prd: IProduct): number {
     return prd.id;

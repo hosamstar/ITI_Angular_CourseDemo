@@ -1,0 +1,44 @@
+<h3>Create Your Order:</h3>
+<div class="mb-3">
+  <label for="prdCat" class="form-label">Category</label>
+  <!-- <select
+    #cat
+    class="form-select form-select-lg"
+    name="cat"
+    id="prdCat"
+    (change)="getSelectedCat(cat.id)"
+  > Two Way Binding is better Than this !! -->
+
+  <!-- <select
+    class="form-select form-select-lg"
+    name="cat"
+    id="prdCat"
+    (change)="getSelectedCat($event)" // In ts // event.target.value
+  > -->
+
+  <select
+    class="form-select form-select-lg"
+    name="cat"
+    id="prdCat"
+    [(ngModel)]="selectedCatId"
+  >
+    <option value="0" selected>All</option>
+    <option *ngFor="let cat of catList" [value]="cat.id" selected>
+      {{ cat.name }}
+    </option>
+  </select>
+</div>
+
+<hr />
+
+<app-product-list
+  [sentCatId]="selectedCatId"
+  (totalPriceChanged)="onTotalPriceChanged($event)"
+></app-product-list>
+<hr />
+<div>
+  <h3>Enter your name:</h3>
+  <input #clientNameInp type="text" class="form-control" />
+</div>
+<h3>Order total price: {{ recievedOrderTotalPrice }}</h3>
+<button class="btn btn-success" (click)="completeOrder()">Place Order</button>
